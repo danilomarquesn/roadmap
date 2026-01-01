@@ -1,0 +1,69 @@
+body {
+    background: #f5f7fa;
+    color: #333;
+    transition: 0.3s;
+  }
+  
+  body.dark {
+    background: #0f172a;
+    color: #e5e7eb;
+  }
+  
+  .roadmap {
+    position: relative;
+  }
+  
+  .roadmap::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: #3b82f6;
+  }
+  
+  .step {
+    width: 50%;
+    padding: 20px;
+    position: relative;
+  }
+  
+  .step.left {
+    left: 0;
+    text-align: right;
+  }
+  
+  .step.right {
+    left: 50%;
+  }
+  
+  .step .content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  body.dark .step .content {
+    background: #020617;
+  }
+  
+  .books {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+  }
+  
+  .book img {
+    width: 80px;
+    border-radius: 5px;
+  }
+  
+  .book a {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    text-decoration: none;
+    color: #2563eb;
+  }
+  

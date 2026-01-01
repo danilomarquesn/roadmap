@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Te ajudo a estudar...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            --bg-body: #f0f2f5;
+            --bg-card: #ffffff;
+            --header-dark: #1e293b;
+            --text-main: #334155;
+            --primary: #f59e0b; 
+            --accent: #3b82f6;
+            --border-color: #e2e8f0;
+            --btn-idle: #ffffff;
+            --amazon: #ff9900;
+            --mercadolivre: #fff159;
+            --udemy: #a435f0;
+            --youtube: #ff0000;
+            
+            /* AJUSTE O TAMANHO DA BADGE AQUI */
+            --badge-size: 100px; 
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --header-dark: #020617;
+            --border-color: #334155;
+            --btn-idle: #1e293b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.3s, color 0.3s; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; }
+
+        /* Header */
+        .hero-banner {
+            background: var(--header-dark);
+            color: white;
+            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+        .header-top { display: flex; align-items: center; gap: 20px; }
+        .brain-icon { font-size: 3.5rem; color: var(--primary); }
+        .hero-text h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 5px; }
+
+        .header-socials { display: flex; gap: 15px; margin-top: 10px; }
+        .social-badge {
+            width: 50px; height: 50px; border-radius: 50%;
+            background: rgba(255,255,255,0.1); display: flex;
+            align-items: center; justify-content: center;
+            color: white; font-size: 1.5rem; text-decoration: none;
+            border: 2px solid var(--primary); transition: 0.3s;
+        }
+        .social-badge:hover { background: var(--primary); transform: translateY(-3px); }
+
+        /* Nav & Search */
+        .nav-container {
+            display: flex; justify-content: center;
+            gap: 12px; padding: 30px; flex-wrap: wrap;
+            align-items: center;
+        }
+        .btn-main {
+            padding: 12px 22px; border-radius: 50px;
+            border: 2px solid var(--border-color); background: var(--btn-idle);
+            color: var(--text-main); font-weight: 700; cursor: pointer;
+            display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            height: 48px;
+        }
+        .btn-main.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .search-wrapper { position: relative; display: flex; align-items: center; }
+        .search-input {
+            width: 0; opacity: 0; padding: 0;
+            border-radius: 50px; border: 2px solid var(--primary);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--bg-card); color: var(--text-main);
+            outline: none; font-family: inherit; font-weight: 600;
+            height: 48px;
+        }
+        .search-wrapper.active .search-input { width: 250px; opacity: 1; padding: 0 20px 0 45px; margin-left: -48px; }
+        .search-btn { position: relative; z-index: 2; cursor: pointer; }
+
+        /* Grid */
+        .roadmap-grid {
+            max-width: 1200px; margin: 0 auto 50px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px; padding: 0 20px;
+        }
+
+        /* AWS Badge Quadrada */
+        .card-wrapper-badge { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; }
+        .badge-square {
+            width: var(--badge-size);
+            height: var(--badge-size);
+            background: #fff;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            border: 0px solid var(--primary);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .badge-square img { width: 85%; height: 85%; object-fit: contain; }
+
+        /* AWS Circle Badges */
+        /*
+        .card-wrapper-badge { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; }
+        .badge-circle {
+            width: 90px; height: 90px; background: #fff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 4px solid var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            color: #232f3e; font-size: 2.5rem;
+        }*/
+
+        /* Card */
+        .card {
+            background: var(--bg-card); border-radius: 12px; padding: 25px;
+            border: 1px solid var(--border-color); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); 
+            width: 100%;
+        }
+        .step-number {
+            display: inline-flex; align-items: center; justify-content: center;
+            background-color: var(--primary); color: white; width: 28px; height: 28px;
+            border-radius: 50%; font-size: 0.8rem; font-weight: 800; margin-right: 12px;
+        }
+        .card h3 { 
+            font-size: 1.1rem; font-weight: 800; margin-bottom: 20px; 
+            border-bottom: 2px solid var(--border-color); padding-bottom: 10px;
+        }
+        .tech-pill-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
+        .tech-pill { background: #94a3b833; padding: 6px 14px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
+
+        /* Affiliate Buttons */
+        .affiliate-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-aff {
+            padding: 10px; border-radius: 8px; text-decoration: none;
+            font-size: 0.7rem; font-weight: 800; display: flex;
+            align-items: center; justify-content: center; gap: 6px; color: #000;
+        }
+        .btn-amz { background: var(--amazon); }
+        .btn-ml { background: var(--mercadolivre); }
+        .btn-udemy { background: var(--udemy); color: #fff; }
+        .btn-yt { background: var(--youtube); color: #fff; }
+
+        .ad-banner {
+            max-width: 728px; margin: 20px auto; min-height: 90px;
+            background: #e2e8f0; display: flex; align-items: center;
+            justify-content: center; border-radius: 8px; font-size: 0.75rem;
+            color: #64748b; border: 1px dashed #94a3b8;
+        }
+
+        footer { background: var(--bg-card); padding: 40px 20px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 50px; }
+        .social-box { margin-bottom: 25px; display: flex; justify-content: center; gap: 20px; }
+        .social-box a { font-size: 1.8rem; color: var(--accent); }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body data-theme="light">
+
+<header class="hero-banner">
+    <div class="header-top">
+        <i class="ph ph-brain brain-icon"></i>
+        <div class="hero-text">
+            <h1 id="txt-title">Te ajudo estudar...</h1>
+            <p id="txt-subtitle">Minha trilha pessoal para te ajudar nos estudos de tecnologia.</p>
+        </div>
+    </div>
+    <div class="header-socials">
+        <a href="https://github.com/danilomarquesn" class="social-badge"><i class="ph ph-github-logo"></i></a>
+        <a href="https://www.linkedin.com/in/danilomarquesnascimento/" class="social-badge"><i class="ph ph-linkedin-logo"></i></a>
+        <a href="https://medium.com/@danilomarques.n" class="social-badge"><i class="ph ph-medium-logo"></i></a>
+    </div>
+</header>
+
+<div class="ad-banner" id="txt-ad-top">Publicidade Google AdSense (Topo)</div>
+
+<nav class="nav-container">
+    <button id="btn-devops" class="btn-main active" onclick="toggleRoadmap('devops')"><i class="ph ph-gear-six"></i> DevOps</button>
+    <button id="btn-sre" class="btn-main" onclick="toggleRoadmap('sre')"><i class="ph ph-activity"></i> SRE</button>
+    <button id="btn-aws" class="btn-main" onclick="toggleRoadmap('aws')"><i class="ph ph-amazon-logo"></i> AWS</button>
+    <button class="btn-main" onclick="toggleLanguage()"><i class="ph ph-translate"></i> <span id="btn-lang-txt">English</span></button>
+    <button id="btn-theme" class="btn-main" onclick="toggleTheme()"><i id="theme-icon" class="ph ph-moon"></i> <span id="theme-text">Dark Mode</span></button>
+    <button class="btn-main" onclick="window.print()"><i class="ph ph-file-pdf"></i> PDF</button>
+
+    <div class="search-wrapper" id="searchWrapper">
+        <button class="btn-main search-btn" onclick="toggleSearch(event)"><i class="ph ph-magnifying-glass"></i></button>
+        <input type="text" class="search-input" id="searchInput" placeholder="Buscar curso..." onkeyup="filterCards()">
+    </div>
+</nav>
+
+<main id="roadmap-content" class="roadmap-grid">
+    
+    <div id="section-devops" class="roadmap-section" style="display: contents;">
+        <div class="card">
+            <h3><span class="step-number">1</span> Programming Language</h3>
+            <div class="tech-pill-container"><span class="tech-pill">Python</span><span class="tech-pill">Go</span><span class="tech-pill">Node.js</span></div>
+            <div class="affiliate-btns">
+                <a href="#" class="btn-aff btn-amz"><i class="ph ph-amazon-logo"></i> Amazon</a>
+                <a href="#" class="btn-aff btn-ml"><i class="ph ph-shopping-cart"></i> Mercado Livre</a>
+                <a href="#" class="btn-aff btn-udemy"><i class="ph ph-graduation-cap"></i> Udemy</a>
+                <a href="#" class="btn-aff btn-yt"><i class="ph ph-youtube-logo"></i> YouTube</a>
+            </div>
+        </div>
+        <div class="card">
+            <h3><span class="step-number">2</span> Linux Operating System</h3>
+            <div class="tech-pill-container"><span class="tech-pill">Ubuntu</span><span class="tech-pill">CentOS</span><span class="tech-pill">Bash Scripting</span></div>
+            <div class="affiliate-btns">
+                <a href="#" class="btn-aff btn-amz"><i class="ph ph-amazon-logo"></i> Amazon</a>
+                <a href="#" class="btn-aff btn-ml"><i class="ph ph-shopping-cart"></i> Mercado Livre</a>
+                <a href="#" class="btn-aff btn-udemy"><i class="ph ph-graduation-cap"></i> Udemy</a>
+                <a href="#" class="btn-aff btn-yt"><i class="ph ph-youtube-logo"></i> YouTube</a>
+            </div>
+        </div>
+        <div class="card">
+            <h3><span class="step-number">3</span> Networking & Protocols</h3>
+            <div class="tech-pill-container"><span class="tech-pill">HTTP/S</span><span class="tech-pill">DNS</span><span class="tech-pill">SSH</span><span class="tech-pill">TCP/IP</span></div>
+            <div class="affiliate-btns">
+                <a href="#" class="btn-aff btn-amz"><i class="ph ph-amazon-logo"></i> Amazon</a>
+                <a href="#" class="btn-aff btn-ml"><i class="ph ph-shopping-cart"></i> Mercado Livre</a>
+                <a href="#" class="btn-aff btn-udemy"><i class="ph ph-graduation-cap"></i> Udemy</a>
+                <a href="#" class="btn-aff btn-yt"><i class="ph ph-youtube-logo"></i> YouTube</a>
+            </div>
+        </div>
+        <div class="card">
+            <h3><span class="step-number">4</span> Docker</h3>
+            <div class="tech-pill-container"><span class="tech-pill">Containers</span><span class="tech-pill">Images</span><span class="tech-pill">Docker Hub</span></div>
+            <div class="affiliate-btns">
+                <a href="#" class="btn-aff btn-amz"><i class="ph ph-amazon-logo"></i> Amazon</a>
+                <a href="#" class="btn-aff btn-ml"><i class="ph ph-shopping-cart"></i> Mercado Livre</a>
+                <a href="#" class="btn-aff btn-udemy"><i class="ph ph-graduation-cap"></i> Udemy</a>
+                <a href="#" class="btn-aff btn-yt"><i class="ph ph-youtube-logo"></i> YouTube</a>
+            </div>
+        </div>
+        <div class="card">
+            <h3><span class="step-number">5</span> Git & GitHub</h3>
+            <div class="tech-pill-container"><span class="tech-pill">GitFlow</span><span class="tech-pill">Conventional Commits</span></div>
+            <div class="affiliate-btns">
+                <a href="#" class="btn-aff btn-amz"><i class="ph ph-amazon-logo"></i> Amazon</a>
+                <a href="#" class="btn-aff btn-ml"><i class="ph ph-shopping-cart"></i> Mercado Livre</a>
+                <a href="#" class="btn-aff btn-udemy"><i class="ph ph-graduation-cap"></i> Udemy</a>
+                <a href="#" class="btn-aff btn-yt"><i class="ph ph-youtube-logo"></i> YouTube</a>
+            </div>
+        </div>
+        <div class="card">
+            <h3><span class="step-number">6</span> Infrastructure as Code</h3>
+            <div class="tech-pill-container"><span class="tech-pill">Terraform</span><span class="tech-pill">Ansible</span><span class="tech-pill">CloudFormation</span></div>
+            <div class="affiliate-btns">
+                <a href="#" class="btn-aff btn-amz"><i class="ph ph-amazon-logo"></i> Amazon</a>
+                <a href="#" class="btn-aff btn-ml"><i class="ph ph-shopping-cart"></i> Mercado Livre</a>
+                <a href="#" class="btn-aff btn-udemy"><i class="ph ph-graduation-cap"></i> Udemy</a>
+                <a href="#" class="btn-aff btn-yt"><i class="ph ph-youtube-logo"></i> YouTube</a>
+            </div>
+        </div>
+        <div class="card">
+            <h3><span class="step-number">7</span> CI/CD Pipelines</h3>
+            <div class="tech-pill-container"><span class="tech-pill">GitHub Actions</span><span class="tech-pill">Jenkins</span><span class="tech-pill">GitLab CI</span></div>
+            <div class="affiliate-btns">
+                <a href="#" class="btn-aff btn-amz"><i class="ph ph-amazon-logo"></i> Amazon</a>
+                <a href="#" class="btn-aff btn-ml"><i class="ph ph-shopping-cart"></i> Mercado Livre</a>
+                <a href="#" class="btn-aff btn-udemy"><i class="ph ph-graduation-cap"></i> Udemy</a>
+                <a href="#" class="btn-aff btn-yt"><i class="ph ph-youtube-logo"></i> YouTube</a>
+            </div>
+        </div>
+        <div class="card">
+            <h3><span class="step-number">8</span> Kubernetes</h3>
+            <div class="tech-pill-container"><span class="tech-pill">Pods</span><span class="tech-pill">Services</span><span class="tech-pill">Helm</span><span class="tech-pill">K8s Architecture</span></div>
+            <div class="affiliate-btns">
+                <a href="#" class="btn-aff btn-amz"><i class="ph ph-amazon-logo"></i> Amazon</a>
+                <a href="#" class="btn-aff btn-ml"><i class="ph ph-shopping-cart"></i> Mercado Livre</a>
+                <a href="#" class="btn-aff btn-udemy"><i class="ph ph-graduation-cap"></i> Udemy</a>
+                <a href="#" class="btn-aff btn-yt"><i class="ph ph-youtube-logo"></i> YouTube</a>
+            </div>
+        </div>
+        <div class="card">
+            <h3><span class="step-number">9</span> Monitoring & Logging</h3>
+            <div class="tech-pill-container"><span class="tech-pill">Prometheus</span><span class="tech-pill">Grafana</span><span class="tech-pill">ELK Stack</span></div>
+            <div class="affiliate-btns">
+                <a href="#" class="btn-aff btn-amz"><i class="ph ph-amazon-logo"></i> Amazon</a>
+                <a href="#" class="btn-aff btn-ml"><i class="ph ph-shopping-cart"></i> Mercado Livre</a>
+                <a href="#" class="btn-aff btn-udemy"><i class="ph ph-graduation-cap"></i> Udemy</a>
+                <a href="#" class="btn-aff btn-yt"><i class="ph ph-youtube-logo"></i> YouTube</a>
+            </div>
+        </div>
+        <div class="card">
+            <h3><span class="step-number">10</span> Web Servers</h3>
+            <div class="tech-pill-container"><span class="tech-pill">Nginx</span><span class="tech-pill">Apache</span><span class="tech-pill">Reverse Proxy</span></div>
+            <div class="affiliate-btns">
+                <a href="#" class="btn-aff btn-amz"><i class="ph ph-amazon-logo"></i> Amazon</a>
+                <a href="#" class="btn-aff btn-ml"><i class="ph ph-shopping-cart"></i> Mercado Livre</a>
+                <a href="#" class="btn-aff btn-udemy"><i class="ph ph-graduation-cap"></i> Udemy</a>
+                <a href="#" class="btn-aff btn-yt"><i class="ph ph-youtube-logo"></i> YouTube</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="section-sre" class="roadmap-section hidden" style="display: contents;">
+        <div class="card">
+            <h3><span class="step-number">1</span> Error Budgets & SLOs</h3>
+            <div class="tech-pill-container"><span class="tech-pill">SLI</span><span class="tech-pill">SLA</span></div>
+            <div class="affiliate-btns">
+                <a href="#" class="btn-aff btn-amz"><i class="ph ph-amazon-logo"></i> Amazon</a>
+                <a href="#" class="btn-aff btn-ml"><i class="ph ph-shopping-cart"></i> Mercado Livre</a>
+                <a href="#" class="btn-aff btn-udemy"><i class="ph ph-graduation-cap"></i> Udemy</a>
+                <a href="#" class="btn-aff btn-yt"><i class="ph ph-youtube-logo"></i> YouTube</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="section-aws" class="roadmap-section hidden" style="display: contents;">
+        <div class="card-wrapper-badge">
+            <div class="badge-square">
+                <img src="assets/images/aws/sec.png" alt="AWS Cloud Practitioner">
+            </div>
+            <div class="card">
+                <h3><span class="step-number">1</span> Cloud Practitioner</h3>
+                <div class="tech-pill-container"><span class="tech-pill">Core Services</span><span class="tech-pill">Pricing</span></div>
+                <div class="affiliate-btns">
+                    <a href="#" class="btn-aff btn-amz"><i class="ph ph-amazon-logo"></i> Amazon</a>
+                    <a href="#" class="btn-aff btn-ml"><i class="ph ph-shopping-cart"></i> Mercado Livre</a>
+                    <a href="#" class="btn-aff btn-udemy"><i class="ph ph-graduation-cap"></i> Udemy</a>
+                    <a href="#" class="btn-aff btn-yt"><i class="ph ph-youtube-logo"></i> YouTube</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-wrapper-badge">
+            <div class="badge-square">
+                <img src="assets/images/aws/cloudops.jpg" alt="AWS Cloud Practitioner">
+            </div>
+            <div class="card">
+                <h3><span class="step-number">1</span> Cloud Practitioner</h3>
+                <div class="tech-pill-container"><span class="tech-pill">Core Services</span><span class="tech-pill">Pricing</span></div>
+                <div class="affiliate-btns">
+                    <a href="#" class="btn-aff btn-amz"><i class="ph ph-amazon-logo"></i> Amazon</a>
+                    <a href="#" class="btn-aff btn-ml"><i class="ph ph-shopping-cart"></i> Mercado Livre</a>
+                    <a href="#" class="btn-aff btn-udemy"><i class="ph ph-graduation-cap"></i> Udemy</a>
+                    <a href="#" class="btn-aff btn-yt"><i class="ph ph-youtube-logo"></i> YouTube</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="social-box">
+        <a href="#"><i class="ph ph-linkedin-logo"></i></a>
+        <a href="#"><i class="ph ph-whatsapp-logo"></i></a>
+        <a href="#"><i class="ph ph-instagram-logo"></i></a>
+        <a href="#"><i class="ph ph-x-logo"></i></a>
+    </div>
+    <div class="ad-banner" id="txt-ad-bottom">Publicidade Google AdSense (Rodapé)</div>
+    <p id="txt-footer-copy">© 2026 Te ajudo estudar. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+    /* Lógica de funcionamento completa */
+    let currentLang = 'pt';
+    const translations = {
+        pt: { title: "Te ajudo estudar", subtitle: "Tudo o que você precisa para dominar a tecnologia.", langBtn: "English", ad: "Publicidade Google AdSense", copy: "© 2026 Te ajudo estudar. Todos os direitos reservados." },
+        en: { title: "I help you study", subtitle: "Everything you need to master technology.", langBtn: "Português", ad: "Google AdSense Advertisement", copy: "© 2026 I help you study. All rights reserved." }
+    };
+
+    function toggleSearch(e) {
+        e.stopPropagation();
+        const wrapper = document.getElementById('searchWrapper');
+        wrapper.classList.toggle('active');
+        if(wrapper.classList.contains('active')) document.getElementById('searchInput').focus();
+    }
+
+    document.addEventListener('click', (e) => {
+        const wrapper = document.getElementById('searchWrapper');
+        if (wrapper && !wrapper.contains(e.target)) {
+            wrapper.classList.remove('active');
+            document.getElementById('searchInput').value = "";
+            filterCards();
+        }
+    });
+
+    function filterCards() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            const text = card.innerText.toLowerCase();
+            const isMatch = text.includes(query);
+            if (query.length > 0) {
+                card.closest('.roadmap-section').classList.remove('hidden');
+                card.style.display = isMatch ? "block" : "none";
+                if (card.parentElement.classList.contains('card-wrapper-badge')) {
+                    card.parentElement.style.display = isMatch ? "flex" : "none";
+                }
+            } else {
+                const activeBtn = document.querySelector('.btn-main.active').id;
+                toggleRoadmap(activeBtn.replace('btn-', ''));
+            }
+        });
+    }
+
+    function toggleRoadmap(mode) {
+        document.getElementById('searchInput').value = "";
+        ['devops', 'sre', 'aws'].forEach(s => {
+            const section = document.getElementById('section-' + s);
+            section.classList.toggle('hidden', s !== mode);
+            document.getElementById('btn-' + s).classList.toggle('active', s === mode);
+            section.querySelectorAll('.card').forEach(c => c.style.display = "block");
+            section.querySelectorAll('.card-wrapper-badge').forEach(w => w.style.display = "flex");
+        });
+    }
+
+    function toggleLanguage() {
+        currentLang = currentLang === 'pt' ? 'en' : 'pt';
+        const t = translations[currentLang];
+        document.getElementById('txt-title').innerText = t.title;
+        document.getElementById('txt-subtitle').innerText = t.subtitle;
+        document.getElementById('btn-lang-txt').innerText = t.langBtn;
+        document.getElementById('txt-ad-top').innerText = t.ad;
+        document.getElementById('txt-ad-bottom').innerText = t.ad;
+        document.getElementById('txt-footer-copy').innerText = t.copy;
+    }
+
+    function toggleTheme() {
+        const body = document.body;
+        const icon = document.getElementById('theme-icon');
+        const isDark = body.getAttribute('data-theme') === 'dark';
+        body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        icon.className = isDark ? 'ph ph-moon' : 'ph ph-sun';
+    }
+</script>
+</body>
+</html>
